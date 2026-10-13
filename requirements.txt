@@ -1,0 +1,19 @@
+# NutriGuide AI — Python Dependencies
+# Install with: pip install -r requirements.txt
+# Requires: Python 3.11+
+
+# ── Web Framework ─────────────────────────────────────────────────────────────
+flask==3.0.3
+flask-cors==4.0.1
+
+# ── IBM watsonx.ai SDK ────────────────────────────────────────────────────────
+ibm-watsonx-ai==1.1.2
+
+# ── Environment & Configuration ───────────────────────────────────────────────
+python-dotenv==1.0.1
+
+# ── HTTP ─────────────────────────────────────────────────────────────────────
+requests==2.32.3
+
+# ── Markdown Processing ───────────────────────────────────────────────────────
+markdown==3.6

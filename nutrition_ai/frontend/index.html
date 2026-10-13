@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriGuide AI — Personalized Nutrition Powered by IBM Granite</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <span class="logo-icon">🥗</span>
+        <div>
+          <h1 class="logo-title">NutriGuide AI</h1>
+          <p class="logo-sub">Personalized Nutrition · Powered by IBM Granite</p>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn active" data-tab="planner">📋 Planner</button>
+        <button class="nav-btn" data-tab="chat">💬 Ask NutriGuide</button>
+        <button class="nav-btn" data-tab="about">ℹ️ About</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- ── TAB: Nutrition Planner ───────────────────────────────────────── -->
+    <section id="tab-planner" class="tab-section active">
+      <div class="section-header">
+        <h2>Create Your Personalized Nutrition Plan</h2>
+        <p>Fill in your details below. Our IBM Granite AI agent will generate a tailored 7-day plan.</p>
+      </div>
+
+      <form id="plannerForm" class="planner-form" novalidate>
+        <!-- Personal Info -->
+        <fieldset class="form-group">
+          <legend>👤 Personal Information</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" required />
+            </div>
+            <div class="form-field">
+              <label for="age">Age *</label>
+              <input type="number" id="age" name="age" min="1" max="120" placeholder="e.g. 32" required />
+            </div>
+            <div class="form-field">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender">
+                <option value="not specified">Prefer not to say</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="non-binary">Non-binary</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="city">City *</label>
+              <input type="text" id="city" name="city" placeholder="e.g. Mumbai" required />
+            </div>
+            <div class="form-field">
+              <label for="country">Country *</label>
+              <input type="text" id="country" name="country" placeholder="e.g. India" required />
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Diet & Health -->
+        <fieldset class="form-group">
+          <legend>🥦 Diet & Health Details</legend>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="diet_preference">Diet Preference *</label>
+              <select id="diet_preference" name="diet_preference" required>
+                <option value="">Select diet type</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+                <option value="vegan">Vegan</option>
+                <option value="pescatarian">Pescatarian</option>
+                <option value="flexitarian">Flexitarian</option>
+                <option value="keto">Keto</option>
+                <option value="paleo">Paleo</option>
+                <option value="gluten-free">Gluten-Free</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="activity_level">Activity Level</label>
+              <select id="activity_level" name="activity_level">
+                <option value="sedentary">Sedentary (desk job, little exercise)</option>
+                <option value="light">Light (1–3 days/week)</option>
+                <option value="moderate" selected>Moderate (3–5 days/week)</option>
+                <option value="active">Active (6–7 days/week)</option>
+                <option value="very active">Very Active (athlete)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="medical_history">Medical History</label>
+              <input type="text" id="medical_history" name="medical_history"
+                placeholder="e.g. Type 2 Diabetes, High Blood Pressure, Thyroid (or None)" />
+              <small class="hint">This helps tailor your plan. Leave blank if none.</small>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="allergies">Food Allergies / Intolerances</label>
+              <input type="text" id="allergies" name="allergies"
+                placeholder="e.g. Lactose intolerant, Nut allergy (or None)" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field full-width">
+              <label for="goals">Health Goals</label>
+              <input type="text" id="goals" name="goals"
+                placeholder="e.g. Weight loss, Build muscle, Manage blood sugar, General wellness" />
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="ethics-notice">
+          <span class="ethics-icon">🛡️</span>
+          <span>This AI application follows responsible AI ethics guidelines. Your data is used only to generate your plan and is not stored or shared.</span>
+        </div>
+
+        <button type="submit" class="btn-primary" id="generateBtn">
+          <span class="btn-icon">✨</span> Generate My Nutrition Plan
+        </button>
+      </form>
+
+      <!-- ── Result Panel ──────────────────────────────────────────────── -->
+      <div id="planResult" class="plan-result hidden">
+        <div class="result-toolbar">
+          <h3>🍽️ Your Personalized Nutrition Plan</h3>
+          <div class="toolbar-actions">
+            <button class="btn-secondary" id="downloadBtn">⬇️ Download .md</button>
+            <button class="btn-secondary" id="askFollowupBtn">💬 Ask a Follow-Up</button>
+            <button class="btn-ghost" id="newPlanBtn">🔄 New Plan</button>
+          </div>
+        </div>
+        <div id="planContent" class="plan-content"></div>
+        <div class="generation-meta" id="generationMeta"></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: Agentic Chat ────────────────────────────────────────────── -->
+    <section id="tab-chat" class="tab-section hidden">
+      <div class="section-header">
+        <h2>💬 Ask NutriGuide</h2>
+        <p>Get instant answers to your nutrition and wellness questions from our IBM Granite AI agent.</p>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-message bot-message">
+            <span class="msg-avatar">🤖</span>
+            <div class="msg-bubble">
+              <strong>NutriGuide AI</strong>
+              <p>Hello! I'm your AI nutritionist powered by IBM Granite. Ask me anything about nutrition, meal planning, dietary needs, or managing health conditions through food. How can I help you today? 😊</p>
+            </div>
+          </div>
+        </div>
+        <div class="chat-suggestions">
+          <p class="suggestions-label">Try asking:</p>
+          <div class="suggestion-chips">
+            <button class="chip" data-q="What foods are good for managing diabetes?">Foods for diabetes?</button>
+            <button class="chip" data-q="How much protein do I need daily?">Daily protein needs?</button>
+            <button class="chip" data-q="What should I eat to lower blood pressure?">Foods for BP?</button>
+            <button class="chip" data-q="How can I lose weight with a vegetarian diet?">Vegetarian weight loss?</button>
+            <button class="chip" data-q="What are anti-inflammatory foods?">Anti-inflammatory foods?</button>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <input type="text" id="chatInput" placeholder="Type your nutrition question..." />
+          <button class="btn-send" id="sendChatBtn">➤ Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB: About ───────────────────────────────────────────────────── -->
+    <section id="tab-about" class="tab-section hidden">
+      <div class="about-grid">
+        <div class="about-card">
+          <h3>🤖 About This Application</h3>
+          <p>
+            <strong>NutriGuide AI</strong> is a web-based Agentic AI application built following all phases 
+            of the Agentic AI Software Development Life Cycle (SDLC). It uses IBM Granite LLM via 
+            IBM watsonx.ai to generate personalized nutrition plans and answer dietary queries.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <h3>🔄 Agentic AI SDLC Phases</h3>
+          <ol class="sdlc-list">
+            <li><strong>Problem Identification:</strong> Personalized nutrition guidance gap</li>
+            <li><strong>Agent Design:</strong> NutritionAgent with IBM Granite LLM</li>
+            <li><strong>Data Collection:</strong> Structured user profiling form</li>
+            <li><strong>Safety & Guardrails:</strong> GuardrailEngine (input validation, harmful content filter, output sanitization)</li>
+            <li><strong>Model Integration:</strong> IBM Granite 13B Instruct via watsonx.ai</li>
+            <li><strong>Development:</strong> Flask backend + HTML/CSS/JS frontend</li>
+            <li><strong>Testing & Validation:</strong> Fallback mock mode + error handling</li>
+            <li><strong>Deployment:</strong> Local server with .bat launcher</li>
+            <li><strong>Monitoring:</strong> Logging, ethics enforcement, disclaimers</li>
+          </ol>
+        </div>
+
+        <div class="about-card">
+          <h3>🛡️ AI Ethics & Responsible AI</h3>
+          <ul class="ethics-list">
+            <li>✅ <strong>Transparency:</strong> Clear AI-generated content labeling</li>
+            <li>✅ <strong>Harmlessness:</strong> Blocks dangerous dietary advice</li>
+            <li>✅ <strong>Fairness:</strong> Inclusive of all dietary cultures</li>
+            <li>✅ <strong>Privacy:</strong> No persistent user data storage</li>
+            <li>✅ <strong>Accountability:</strong> Medical disclaimer on every plan</li>
+            <li>✅ <strong>HAM Principle:</strong> Helpful, Accurate, Mindful responses</li>
+          </ul>
+        </div>
+
+        <div class="about-card">
+          <h3>⚙️ Technology Stack</h3>
+          <ul class="tech-list">
+            <li>🧠 <strong>AI Model:</strong> IBM Granite 13B Instruct</li>
+            <li>☁️ <strong>Platform:</strong> IBM watsonx.ai</li>
+            <li>🐍 <strong>Backend:</strong> Python 3.11 + Flask</li>
+            <li>🌐 <strong>Frontend:</strong> HTML5 + CSS3 + Vanilla JS</li>
+            <li>🛡️ <strong>Safety:</strong> Custom GuardrailEngine</li>
+            <li>📄 <strong>Export:</strong> Markdown (.md) plan files</li>
+          </ul>
+        </div>
+
+        <div class="about-card disclaimer-card">
+          <h3>⚕️ Medical Disclaimer</h3>
+          <p>
+            This application provides AI-generated nutritional information for <strong>educational and 
+            informational purposes only</strong>. It is <strong>not a substitute</strong> for professional 
+            medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider, 
+            registered dietitian, or licensed nutritionist before making significant dietary changes, 
+            especially if you have existing medical conditions.
+          </p>
+        </div>
+
+        <div class="about-card">
+          <h3>📂 GitHub Setup (Task 1)</h3>
+          <ol class="github-steps">
+            <li>Sign in to <a href="https://github.com" target="_blank">github.com</a></li>
+            <li>Click <strong>+</strong> → <strong>New repository</strong></li>
+            <li>Name: <code>nutrition-agentic-ai</code></li>
+            <li>Set to <strong>Public</strong>, add README</li>
+            <li>Clone locally: <code>git clone https://github.com/YOUR_USERNAME/nutrition-agentic-ai.git</code></li>
+            <li>Copy project files into the cloned folder</li>
+            <li>Run: <code>git add . && git commit -m "Initial commit" && git push</code></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Loading Overlay ──────────────────────────────────────────────────── -->
+  <div id="loadingOverlay" class="loading-overlay hidden">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <p class="loading-text">IBM Granite AI is generating your personalized plan...</p>
+      <p class="loading-sub">This may take 15–30 seconds</p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>NutriGuide AI · Powered by <strong>IBM Granite</strong> via watsonx.ai · Built with AI Ethics &amp; HAM Principles</p>
+    <p class="footer-disclaimer">Not a substitute for professional medical advice. Consult a healthcare provider for medical decisions.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
