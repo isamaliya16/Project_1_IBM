@@ -1,6 +1,6 @@
 flask==3.0.3
 flask-cors==4.0.1
-ibm-watsonx-ai==1.1.2
+ibm-watsonx-ai>=1.7.2
 python-dotenv==1.0.1
 requests==2.32.3
 markdown==3.6
